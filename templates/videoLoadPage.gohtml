@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>Video loading Page</title>
+    </head>
+    <body>
+        <h1>Hello, {{ .Youtubeurl }} and video id is {{.ID}}!</h1>
+        <img src="https://img.youtube.com/vi/{{ .ID }}/0.jpg" alt="">
+        <h3> {{ .Title }}</h3>
+        <p>Download as </p>
+        <form action="/download">
+            <button type="submit" name="format" value="mp4">mp4</button>
+            <button type="submit" name="format" value="mp3">mp3</button>
+        </form>
+
+    </body>
+</html>
