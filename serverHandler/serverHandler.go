@@ -17,6 +17,11 @@ var tpl *template.Template
 var videoData *youtube.Video
 var client = youtube.Client{}
 
+const (
+	path             = "Downloads"
+	mode os.FileMode = 0755
+)
+
 var data struct {
 	Youtubeurl string
 	ID         string
@@ -128,6 +133,9 @@ func downloadVideoFunction(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 	}
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		os.Mkdir(path, mode)
+	}
 	if format == "mp4" {
 		DownlaodMp4(videoData, w)
 	} else if format == "mp3" {
@@ -148,9 +156,12 @@ func DownlaodMp4(videoData *youtube.Video, w http.ResponseWriter) {
 	} else {
 		title = videoData.Title
 	}
-
+	mp4PathName := path + "/mp4"
+	if _, err := os.Stat(mp4PathName); os.IsNotExist(err) {
+		os.Mkdir(mp4PathName, mode)
+	}
 	go func() {
-		file, err := os.Create(title + ".mp4")
+		file, err := os.Create(mp4PathName + "/" + title + ".mp4")
 		if err != nil {
 			fmt.Println("error while create file " + title)
 			panic(err)
@@ -174,6 +185,10 @@ func DownlaodMp4(videoData *youtube.Video, w http.ResponseWriter) {
 
 func DownloadMp3() {
 	fmt.Println("je suis le mp3 loader")
+	mp3PathName := path + "/mp3"
+	if _, err := os.Stat(mp3PathName); os.IsNotExist(err) {
+		os.Mkdir(mp3PathName, mode)
+	}
 }
 
 func New(port string) {
